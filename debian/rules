@@ -1,0 +1,78 @@
+#!/usr/bin/make -f
+#
+# debian/rules for Ubuntu linux-firmware
+#
+# Use this however you want, just give credit where credit is due.
+#
+# Copyright (c) 2008 Ben Collins <bcollins@ubuntu.com>
+#
+#
+
+# This is the debhelper compatability version to use.
+export DH_COMPAT=4
+export LC_ALL=C
+export SHELL=/bin/bash -e
+
+#
+# A list of the directories created by makefiles under fw_source.
+#
+GENERATED_DIRS=ea
+
+binary-arch:
+
+build-arch:
+	$(MAKE) -C fw_source update
+
+build-indep:
+
+firm_dir = $(CURDIR)/debian/linux-firmware/lib/firmware
+doc_dir = $(CURDIR)/debian/linux-firmware/usr/share/doc/linux-firmware
+license_dir = $(doc_dir)/licenses
+nic_firm_dir = $(CURDIR)/debian/nic-firmware/lib/firmware
+scsi_firm_dir = $(CURDIR)/debian/scsi-firmware/lib/firmware
+
+install-indep: build-indep
+	dh_testdir
+	dh_testroot
+	dh_clean -k -i
+
+	install -d $(firm_dir)
+
+	rsync -a --exclude=WHENCE --exclude=.git --exclude=debian --exclude fw_source * $(firm_dir)
+	find $(firm_dir) -type f -name "LICEN[CS]E*" |xargs rm
+
+	for f in $$(cat debian/nic-firmware.lst); do \
+		install -m644 -D $$f $(nic_firm_dir)/$$f; \
+	done
+
+	for f in $$(cat debian/scsi-firmware.lst); do \
+		install -m644 -D $$f $(scsi_firm_dir)/$$f; \
+	done
+
+	install -d $(doc_dir)
+	cp WHENCE $(doc_dir)/README
+
+	install -d $(license_dir)
+	cp LICEN[CS]E* $(license_dir)
+
+binary-indep: install-indep
+	dh_testdir
+	dh_testroot
+
+	dh_installchangelogs -i
+	dh_installdocs -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+binary: binary-indep binary-arch
+build: build-arch build-indep
+
+clean:
+	rm -rf $(GENERATED_DIRS)
+	dh_testdir
+	dh_testroot
+	dh_clean

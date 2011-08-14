@@ -1,0 +1,30 @@
+Source: linux-firmware
+Section: misc
+Priority: optional
+Maintainer: BlankOn Developers <blankon-dev@googlegroups.com> 
+Standards-Version: 3.6.1
+Build-Depends: debhelper (>= 4.0.0), rsync, gcc
+Vcs-Git: git://kernel.ubuntu.com/ubuntu/linux-firmware.git
+
+Package: linux-firmware
+Architecture: all
+Priority: optional
+Provides: atmel-firmware
+Conflicts: atmel-firmware
+Replaces: atmel-firmware, linux-restricted-common
+Description: Firmware for Linux kernel drivers
+ This package provides firmware used by Linux kernel drivers.
+
+Package: nic-firmware
+XC-Package-Type: udeb
+Architecture: all
+Section: debian-installer
+Description: Firmware for NICs
+ This package contains firmware needed by some network controllers.
+
+Package: scsi-firmware
+XC-Package-Type: udeb
+Architecture: all
+Section: debian-installer
+Description: Firmware for SCSI controllers
+ This package contains firmware needed by some scsi controllers.
