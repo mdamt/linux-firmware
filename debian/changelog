@@ -1,7 +1,12 @@
+linux-firmware (2.1) pattimura; urgency=low
+
+  * Added ZD1211 firmware 
+
+ -- Mohammad Anwari <mdamt@di.blankon.in>  Mon, 15 Aug 2011 14:48:26 +0300
+
 linux-firmware (2.0) pattimura; urgency=low
 
   * Forked from Ubuntu
-  *
 
  -- Mohammad Anwari <mdamt@di.blankon.in>  Sun, 14 Aug 2011 04:00:59 +0300
 
